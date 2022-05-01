@@ -1,27 +1,20 @@
-type Time = 'minute' | 'hour' | 'day' | 'month' | 'weekday'
-
-type RuleTypes = Record<Time, IRange>
-
-interface IRange {
-  range: number[]
-  isFixed: boolean
-}
+import { IntersectionRangeArray, IRuleTypes, Time, UnionRange } from './types'
 
 export class RandomCron {
-  #ruleTypes: RuleTypes = {
+  #ruleTypes: IRuleTypes = {
     minute: { range: [0, 59], isFixed: false },
     hour: { range: [0, 23], isFixed: false },
     day: { range: [1, 31], isFixed: false },
     month: { range: [1, 12], isFixed: false },
     weekday: { range: [0, 6], isFixed: false },
   }
-  #rules: Partial<RuleTypes> = {}
+  #rules: Partial<IRuleTypes> = {}
   #lastRule: Time
 
   some(time: Time) {
     this.#lastRule = time
     this.#rules[this.#lastRule] = {
-      range: this.#ruleTypes[time].range,
+      range: (<IntersectionRangeArray>this.#ruleTypes[time]).range,
       isFixed: false,
     }
 
@@ -34,7 +27,7 @@ export class RandomCron {
     return this
   }
 
-  between(start: number, end: number) {
+  between(start: UnionRange, end: UnionRange) {
     if (this.#lastRule) {
       this.#rules[this.#lastRule].range = [start, end]
     }
@@ -44,19 +37,18 @@ export class RandomCron {
 
   generate() {
     if (Object.keys(this.#rules).length < 1) {
-      // if rules are not specified, generate totally in random
       this.#rules = {
         minute: { range: [0, 59], isFixed: false },
         hour: { range: [0, 23], isFixed: false },
-        day: { range: [0, 31], isFixed: false },
-        month: { range: [0, 12], isFixed: false },
+        day: { range: [1, 31], isFixed: false },
+        month: { range: [1, 12], isFixed: false },
       }
     }
 
-    const crontab = []
-    const typeNames = Object.keys(this.#ruleTypes)
+    const crontab: string[] = []
+    const typeNames = Object.keys(this.#ruleTypes) as Time[]
     typeNames.map((typeName) => {
-      const rule: IRange = this.#rules[typeName]
+      const rule = this.#rules[typeName]
 
       if (rule && !rule.isFixed) {
         crontab.push(Math.round(Math.random() * (rule.range[1] - rule.range[0]) + rule.range[0]).toString())
