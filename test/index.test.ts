@@ -7,7 +7,7 @@ describe('Fix cron expression length to be 5', () => {
   })
 
   test('When duplicate written, its length should be 5', () => {
-    const expression = new RandomCron().some('minute').between(1, 60).some('minute').between(1, 60).some('minute').between(1, 60).generate()
+    const expression = new RandomCron().some('minute').between(1, 59).some('minute').between(1, 57).some('minute').between(1, 58).generate()
     expect(expression.split(' ')).toHaveLength(5)
   })
 })
