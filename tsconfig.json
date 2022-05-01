@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES6",
+    "lib": [
+      "ES2015",
+      "DOM"
+    ],
+    "sourceMap": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
+  "exclude": [
+    "./dist",
+    "./node_modules",
+    "./.yarn"
+  ]
+}

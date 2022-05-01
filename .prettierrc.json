@@ -1,0 +1,7 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "semi": false,
+  "indent": 2,
+  "printWidth": 150
+}
